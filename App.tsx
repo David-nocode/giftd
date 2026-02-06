@@ -56,8 +56,22 @@ const App: React.FC = () => {
     });
   };
 
+  const formatToSentenceCase = (str: string) => {
+    return str
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
+    // Remove all numerical values
+    let val = e.target.value.replace(/[0-9]/g, '');
+    
+    // Format to sentence case (Capitalize first letter of each word)
+    if (val) {
+      val = formatToSentenceCase(val);
+    }
+
     setInputValue(val);
     if (activeField === 'sender') setSender(val || '___');
     if (activeField === 'recipient') setRecipient(val || '___');
