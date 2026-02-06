@@ -44,7 +44,7 @@ const PaymentSheet: React.FC<Props> = ({ total, quantity, style, onConfirm, onCa
           onClick={onConfirm}
           className="w-full h-16 bg-[#1A1A1A] rounded-full text-white text-sm font-bold uppercase tracking-widest flex items-center justify-center active:scale-95 transition-all mb-6"
         >
-          Authorize Payment
+          Make Payment
         </button>
         
         <button 

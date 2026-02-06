@@ -20,9 +20,9 @@ const App: React.FC = () => {
 
   // Specific Thiings assets for the services
   const haircutIcon = "https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-RCs6a5lnmDpabnkGxGlPRFAZV2yCV3.png&w=1000&q=75"; // Barber
-  const massageIcon = "https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-ptreaSKDFQqhY7oF7Qw6s18YOwh68e.png&w=1000&q=75"; // Spa
+  const massageIcon = "https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-bkdUNYIhdtrWnm5wKkRmKHaRfiGOAx.png&w=1000&q=75"; // Spa
   const washIcon = "https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-nWCKVHxJn8chnWMs4YKYmdQmN9Bhpx.png&w=1000&q=75"; // Dryer
-  const nailIcon = "https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-RCs6a5lnmDpabnkGxGlPRFAZV2yCV3.png&w=1000&q=75"; // Using Barber for style variety
+  const nailIcon = "https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-Q1TeCNtDA7TFWKnxhShYZpGvMVRrV6.png&w=1000&q=75"; // Nails
   
   const salonIcon = "https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-nWCKVHxJn8chnWMs4YKYmdQmN9Bhpx.png&w=1000&q=75";
   const giftIcon = "https://www.thiings.co/_next/image?url=https%3A%2F%2Flftz25oez4aqbxpq.public.blob.vercel-storage.com%2Fimage-ptreaSKDFQqhY7oF7Qw6s18YOwh68e.png&w=1000&q=75";
@@ -144,8 +144,8 @@ const App: React.FC = () => {
       case HaircutStyle.HAIRCUT: return haircutIcon;
       case HaircutStyle.MASSAGE: return massageIcon;
       case HaircutStyle.HAIR_WASH: return washIcon;
-      case HaircutStyle.PEDICURE: return massageIcon; 
-      case HaircutStyle.MANICURE: return giftIcon; 
+      case HaircutStyle.PEDICURE: return nailIcon; 
+      case HaircutStyle.MANICURE: return nailIcon; 
       default: return giftIcon;
     }
   };
@@ -315,7 +315,7 @@ const App: React.FC = () => {
                     onClick={goToNext} 
                     className="w-full h-14 sm:h-16 bg-black rounded-full flex items-center justify-center text-sm font-bold text-white transition-all shadow-[0_10px_40px_rgba(0,0,0,0.2)] active:scale-95 uppercase tracking-widest"
                   >
-                    authorize payment
+                    make payment
                   </button>
                 </NavRow>
               </div>
