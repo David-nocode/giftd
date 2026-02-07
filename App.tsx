@@ -14,7 +14,11 @@ const App: React.FC = () => {
   const [sessionCodes, setSessionCodes] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const salonName = "xcutz salon";
+  // Dynamic salon name logic
+  const salonName = selectedStyle 
+    ? (selectedStyle === HaircutStyle.HAIRCUT ? "Xcutz" : "Wellness Spa") 
+    : "___";
+
   const unitPrice = selectedStyle ? PRICES[selectedStyle] : 0;
   const totalAmount = quantity * unitPrice;
 
@@ -84,6 +88,8 @@ const App: React.FC = () => {
     } else if (activeField === 'recipient' && isRecipientFilled) {
       setActiveField('style');
     } else if (activeField === 'style' && selectedStyle) {
+      // Set default count to 1 when reaching the selector stage
+      if (quantity === 0) setQuantity(1);
       setActiveField('quantity');
     } else if (activeField === 'quantity' && quantity > 0) {
       setActiveField('payment');
@@ -112,13 +118,19 @@ const App: React.FC = () => {
 
   const handleFieldClick = (field: 'sender' | 'recipient' | 'style' | 'quantity' | 'payment') => {
     if (activeField === 'summary' || activeField === 'momo') return;
+    
+    // Set default count to 1 if they jump directly to quantity field
+    if (field === 'quantity' && quantity === 0) {
+      setQuantity(1);
+    }
+
     setActiveField(field);
     if (field === 'sender') setInputValue(sender === '___' ? '' : sender);
     else if (field === 'recipient') setInputValue(recipient === '___' ? '' : recipient);
   };
 
   const adjustQuantity = (delta: number) => {
-    setQuantity(prev => Math.max(0, prev + delta));
+    setQuantity(prev => Math.max(1, prev + delta));
   };
 
   const confirmMomo = () => {
@@ -173,6 +185,7 @@ const App: React.FC = () => {
       </div>
       <div className={`flex items-center flex-wrap gap-x-1.5 sm:gap-x-2 ${isInsideCard ? 'justify-center' : ''}`}>
         <img src={getServiceIcon(selectedStyle || HaircutStyle.HAIRCUT)} alt="" className={`${isInsideCard ? 'w-5 h-5 sm:w-6' : 'w-8 h-8 sm:w-10'} object-contain select-none`} />
+        {/* Only show quantity in sentence if it is not 0, otherwise show ___ */}
         <span onClick={() => handleFieldClick('quantity')} className={`${!isInsideCard ? 'cursor-pointer' : ''} text-black font-bold`}>{quantity === 0 ? '___' : `${quantity}`}</span>
         <span className="text-black font-bold select-none capitalize">{selectedStyle ? selectedStyle : '___'}</span>
         <span className="text-[#888888] font-medium select-none">sessions worth</span>
@@ -214,9 +227,9 @@ const App: React.FC = () => {
     <div className="h-screen w-full flex justify-center bg-white overflow-hidden font-['Space_Grotesk']">
       <div className="h-full w-full max-w-[800px] flex flex-col bg-white text-black relative">
         
-        {/* Header */}
-        <div className="w-full pt-[40px] px-6 sm:px-10 relative bg-white shrink-0">
-          <div className="flex justify-between items-start w-full mb-[40px]">
+        {/* Header Section (Fixed at Top) */}
+        <div className="w-full pt-[40px] px-6 sm:px-10 relative bg-white shrink-0 z-10">
+          <div className="flex justify-between items-start w-full">
             <div className="text-6xl sm:text-[100px] font-bold tracking-tighter flex items-baseline select-none leading-none text-black transition-all">
               gftd<span className="text-[#E11D48]">.</span>
             </div>
@@ -229,18 +242,20 @@ const App: React.FC = () => {
               </div>
             </div>
           </div>
+
+          {/* Dynamic Sentence - Fixed 40px from the bottom of the header content above */}
+          <div className="mt-[40px]">
+            {activeField !== 'summary' && activeField !== 'momo' && (
+              <div className="animate-fade-in transition-all">
+                <DynamicSentence />
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Scrollable Content */}
+        {/* Scrollable Interaction Content */}
         <div className="flex-1 overflow-y-auto no-scrollbar px-6 sm:px-10 pb-8 flex flex-col">
           
-          {/* Dynamic Sentence */}
-          {activeField !== 'summary' && activeField !== 'momo' && (
-            <div className="animate-fade-in transition-all shrink-0">
-              <DynamicSentence />
-            </div>
-          )}
-
           {/* Interaction Area */}
           <div className="flex-1 flex flex-col items-center justify-end pt-10">
             
@@ -309,12 +324,13 @@ const App: React.FC = () => {
                   </div>
                 </div>
                 <span className="text-[#888888] text-[10px] font-bold uppercase tracking-widest mb-4">
-                   {quantity === 0 ? 'select number of sessions' : `total GH ${totalAmount}`}
+                   {quantity > 1 ? `total GH ${totalAmount}` : 'choose number of sessions'}
                 </span>
                 <NavRow isNextDisabled={quantity === 0}>
                   <div className="w-full h-14 sm:h-16 bg-white border-2 border-black rounded-full flex items-center justify-between px-8 shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
                     <button onClick={() => adjustQuantity(-1)} className="text-3xl font-light text-[#BCBCBC] hover:text-black transition-colors w-10">-</button>
-                    <span className="text-2xl font-bold text-[#1A1A1A]">{quantity === 0 ? '___' : quantity}</span>
+                    {/* The count button shows 1 immediately when entering this step */}
+                    <span className="text-2xl font-bold text-[#1A1A1A]">{quantity === 0 ? '1' : quantity}</span>
                     <button onClick={() => adjustQuantity(1)} className="text-2xl font-light text-[#BCBCBC] hover:text-black transition-colors w-10">+</button>
                   </div>
                 </NavRow>
