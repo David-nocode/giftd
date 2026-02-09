@@ -68,14 +68,10 @@ const App: React.FC = () => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Remove all numerical values
     let val = e.target.value.replace(/[0-9]/g, '');
-    
-    // Format to sentence case (Capitalize first letter of each word)
     if (val) {
       val = formatToSentenceCase(val);
     }
-
     setInputValue(val);
     if (activeField === 'sender') setSender(val || '___');
     if (activeField === 'recipient') setRecipient(val || '___');
@@ -88,7 +84,6 @@ const App: React.FC = () => {
     } else if (activeField === 'recipient' && isRecipientFilled) {
       setActiveField('style');
     } else if (activeField === 'style' && selectedStyle) {
-      // Set default count to 1 when reaching the selector stage
       if (quantity === 0) setQuantity(1);
       setActiveField('quantity');
     } else if (activeField === 'quantity' && quantity > 0) {
@@ -118,12 +113,9 @@ const App: React.FC = () => {
 
   const handleFieldClick = (field: 'sender' | 'recipient' | 'style' | 'quantity' | 'payment') => {
     if (activeField === 'summary' || activeField === 'momo') return;
-    
-    // Set default count to 1 if they jump directly to quantity field
     if (field === 'quantity' && quantity === 0) {
       setQuantity(1);
     }
-
     setActiveField(field);
     if (field === 'sender') setInputValue(sender === '___' ? '' : sender);
     else if (field === 'recipient') setInputValue(recipient === '___' ? '' : recipient);
@@ -185,7 +177,6 @@ const App: React.FC = () => {
       </div>
       <div className={`flex items-center flex-wrap gap-x-1.5 sm:gap-x-2 ${isInsideCard ? 'justify-center' : ''}`}>
         <img src={getServiceIcon(selectedStyle || HaircutStyle.HAIRCUT)} alt="" className={`${isInsideCard ? 'w-5 h-5 sm:w-6' : 'w-8 h-8 sm:w-10'} object-contain select-none`} />
-        {/* Only show quantity in sentence if it is not 0, otherwise show ___ */}
         <span onClick={() => handleFieldClick('quantity')} className={`${!isInsideCard ? 'cursor-pointer' : ''} text-black font-bold`}>{quantity === 0 ? '___' : `${quantity}`}</span>
         <span className="text-black font-bold select-none capitalize">{selectedStyle ? selectedStyle : '___'}</span>
         <span className="text-[#888888] font-medium select-none">sessions worth</span>
@@ -230,20 +221,22 @@ const App: React.FC = () => {
         {/* Header Section (Fixed at Top) */}
         <div className="w-full pt-[40px] px-6 sm:px-10 relative bg-white shrink-0 z-10">
           <div className="flex justify-between items-start w-full">
+            {/* Logo Text Reverted */}
             <div className="text-6xl sm:text-[100px] font-bold tracking-tighter flex items-baseline select-none leading-none text-black transition-all">
               gftd<span className="text-[#E11D48]">.</span>
             </div>
+            {/* Lowercase Date Section */}
             <div className="text-right select-none pt-2">
-              <div className="text-xl sm:text-2xl font-bold leading-none tracking-tighter text-black">
-                {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).replace(' ', '-')}
+              <div className="text-xl sm:text-2xl font-bold leading-none tracking-tighter text-black lowercase">
+                {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).replace(' ', '-').toLowerCase()}
               </div>
-              <div className="text-xs sm:text-sm font-medium text-[#888888] leading-none mt-1 tracking-tight">
-                {new Date().toLocaleDateString('en-US', { weekday: 'long' })}
+              <div className="text-xs sm:text-sm font-medium text-[#888888] leading-none mt-1 tracking-tight lowercase">
+                {new Date().toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase()}
               </div>
             </div>
           </div>
 
-          {/* Dynamic Sentence - Fixed 40px from the bottom of the header content above */}
+          {/* Dynamic Sentence */}
           <div className="mt-[40px]">
             {activeField !== 'summary' && activeField !== 'momo' && (
               <div className="animate-fade-in transition-all">
@@ -255,8 +248,6 @@ const App: React.FC = () => {
 
         {/* Scrollable Interaction Content */}
         <div className="flex-1 overflow-y-auto no-scrollbar px-6 sm:px-10 pb-8 flex flex-col">
-          
-          {/* Interaction Area */}
           <div className="flex-1 flex flex-col items-center justify-end pt-10">
             
             {(activeField === 'sender' || activeField === 'recipient') && (
@@ -329,7 +320,6 @@ const App: React.FC = () => {
                 <NavRow isNextDisabled={quantity === 0}>
                   <div className="w-full h-14 sm:h-16 bg-white border-2 border-black rounded-full flex items-center justify-between px-8 shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
                     <button onClick={() => adjustQuantity(-1)} className="text-3xl font-light text-[#BCBCBC] hover:text-black transition-colors w-10">-</button>
-                    {/* The count button shows 1 immediately when entering this step */}
                     <span className="text-2xl font-bold text-[#1A1A1A]">{quantity === 0 ? '1' : quantity}</span>
                     <button onClick={() => adjustQuantity(1)} className="text-2xl font-light text-[#BCBCBC] hover:text-black transition-colors w-10">+</button>
                   </div>
@@ -404,7 +394,6 @@ const App: React.FC = () => {
                 </div>
               </div>
             )}
-
           </div>
         </div>
       </div>
