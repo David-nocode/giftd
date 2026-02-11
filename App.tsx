@@ -169,7 +169,7 @@ const App: React.FC = () => {
   };
 
   const DynamicSentence = ({ isInsideCard = false }: { isInsideCard?: boolean }) => (
-    <div className={`space-y-1.5 sm:space-y-2 ${isInsideCard ? 'text-lg sm:text-xl' : 'text-2xl sm:text-[34px]'} font-semibold leading-tight tracking-tight text-center sm:text-left`}>
+    <div className={`space-y-1.5 sm:space-y-2 ${isInsideCard ? 'text-lg sm:text-xl' : 'text-2xl sm:text-[34px]'} font-semibold leading-tight tracking-tight text-left`}>
       <div className={`flex flex-wrap items-baseline gap-x-1.5 sm:gap-x-2 ${isInsideCard ? 'justify-center' : ''}`}>
         <span onClick={() => handleFieldClick('sender')} className={`${!isInsideCard ? 'cursor-pointer' : ''} text-black`}>{sender}</span>
         <span className="text-[#888888] font-medium select-none">is gifting</span>
@@ -195,22 +195,40 @@ const App: React.FC = () => {
     </div>
   );
 
-  const NavRow = ({ children, isNextDisabled = false, isBackHidden = false, isNextHidden = false }: { children?: React.ReactNode, isNextDisabled?: boolean, isBackHidden?: boolean, isNextHidden?: boolean }) => (
-    <div className="w-full flex items-center gap-3 sm:gap-4 mt-auto pb-6 sm:pb-10">
-      <button 
-        onClick={goToBack} 
-        className={`px-6 sm:px-8 h-14 sm:h-16 flex-shrink-0 bg-white border border-[#EAE9E4] rounded-full flex items-center justify-center text-xs font-bold uppercase tracking-widest text-[#BCBCBC] hover:text-[#1A1A1A] transition-all active:scale-95 ${isBackHidden ? 'invisible pointer-events-none' : ''}`}
-      >
-        back
-      </button>
-      <div className="flex-1 flex justify-center">{children}</div>
-      <button 
-        onClick={goToNext} 
-        disabled={isNextDisabled}
-        className={`px-6 sm:px-8 h-14 sm:h-16 flex-shrink-0 bg-black rounded-full flex items-center justify-center text-xs font-bold uppercase tracking-widest text-white transition-all active:scale-95 ${isNextDisabled ? 'opacity-20 pointer-events-none' : 'opacity-100 shadow-[0_4px_24px_rgba(0,0,0,0.15)]'} ${isNextHidden ? 'invisible pointer-events-none' : ''}`}
-      >
-        next
-      </button>
+  const NavRow = ({ 
+    children, 
+    isNextDisabled = false, 
+    isBackHidden = false, 
+    isNextHidden = false,
+    center = false
+  }: { 
+    children?: React.ReactNode, 
+    isNextDisabled?: boolean, 
+    isBackHidden?: boolean, 
+    isNextHidden?: boolean,
+    center?: boolean
+  }) => (
+    <div className="w-full flex items-center gap-[10px] mt-auto pb-6 sm:pb-10">
+      {!isBackHidden && (
+        <button 
+          onClick={goToBack} 
+          className="px-6 sm:px-8 h-14 sm:h-16 flex-shrink-0 bg-white border border-[#EAE9E4] rounded-full flex items-center justify-center text-xs font-bold uppercase tracking-widest text-[#BCBCBC] hover:text-[#1A1A1A] transition-all active:scale-95"
+        >
+          back
+        </button>
+      )}
+      <div className={`flex-1 flex ${center ? 'justify-center' : 'justify-start'}`}>
+        {children}
+      </div>
+      {!isNextHidden && (
+        <button 
+          onClick={goToNext} 
+          disabled={isNextDisabled}
+          className={`px-6 sm:px-8 h-14 sm:h-16 flex-shrink-0 bg-black rounded-full flex items-center justify-center text-xs font-bold uppercase tracking-widest text-white transition-all active:scale-95 ${isNextDisabled ? 'opacity-20 pointer-events-none' : 'opacity-100 shadow-[0_4px_24px_rgba(0,0,0,0.15)]'}`}
+        >
+          next
+        </button>
+      )}
     </div>
   );
 
@@ -221,11 +239,9 @@ const App: React.FC = () => {
         {/* Header Section (Fixed at Top) */}
         <div className="w-full pt-[40px] px-6 sm:px-10 relative bg-white shrink-0 z-10">
           <div className="flex justify-between items-start w-full">
-            {/* Logo Text Reverted */}
             <div className="text-6xl sm:text-[100px] font-bold tracking-tighter flex items-baseline select-none leading-none text-black transition-all">
               gftd<span className="text-[#E11D48]">.</span>
             </div>
-            {/* Lowercase Date Section */}
             <div className="text-right select-none pt-2">
               <div className="text-xl sm:text-2xl font-bold leading-none tracking-tighter text-black lowercase">
                 {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).replace(' ', '-').toLowerCase()}
@@ -251,7 +267,7 @@ const App: React.FC = () => {
           <div className="flex-1 flex flex-col items-center justify-end pt-10">
             
             {(activeField === 'sender' || activeField === 'recipient') && (
-              <div className="w-full animate-fade-in flex flex-col items-center">
+              <div className="w-full animate-fade-in flex flex-col items-start">
                 <input
                   ref={inputRef}
                   type="text"
@@ -265,7 +281,7 @@ const App: React.FC = () => {
                 </span>
                 <NavRow isBackHidden={activeField === 'sender'} isNextDisabled={activeField === 'sender' ? !isSenderFilled : !isRecipientFilled}>
                   <div 
-                    className={`w-full h-14 sm:h-16 bg-white border-2 rounded-full flex items-center justify-center text-lg sm:text-xl font-bold tracking-tight text-[#1A1A1A] transition-all duration-300 ${inputValue ? 'border-black' : 'border-[#EAE9E4]'}`}
+                    className={`w-full h-14 sm:h-16 bg-white border-2 rounded-full flex items-center justify-start px-6 text-lg sm:text-xl font-bold tracking-tight text-[#1A1A1A] transition-all duration-300 ${inputValue ? 'border-black' : 'border-[#EAE9E4]'}`}
                     onClick={() => inputRef.current?.focus()}
                   >
                     <span>{inputValue || "___"}</span>
@@ -276,8 +292,8 @@ const App: React.FC = () => {
             )}
 
             {activeField === 'style' && (
-              <div className="w-full max-w-[480px] animate-fade-in flex flex-col items-center">
-                <div className="w-full bg-white border border-[#EAE9E4] rounded-[32px] p-4 sm:p-6 shadow-[0_10px_40px_rgba(0,0,0,0.04)] mb-8 overflow-y-auto max-h-[320px] no-scrollbar">
+              <div className="w-full animate-fade-in flex flex-col items-center self-start">
+                <div className="w-full max-w-[480px] bg-white border border-[#EAE9E4] rounded-[32px] p-4 sm:p-6 shadow-[0_10px_40px_rgba(0,0,0,0.04)] mb-8 overflow-y-auto max-h-[320px] no-scrollbar">
                   <div className="space-y-2">
                     {Object.values(HaircutStyle).map((style) => (
                       <div 
@@ -297,15 +313,15 @@ const App: React.FC = () => {
                     ))}
                   </div>
                 </div>
-                <NavRow isNextDisabled={!selectedStyle}>
+                <NavRow isNextDisabled={!selectedStyle} center={true}>
                   <span className="text-[#888888] text-[10px] font-bold uppercase tracking-widest opacity-60">select service</span>
                 </NavRow>
               </div>
             )}
 
             {activeField === 'quantity' && (
-              <div className="w-full max-w-[480px] animate-fade-in flex flex-col items-center">
-                <div className="w-full bg-white border border-[#EAE9E4] rounded-[40px] p-6 sm:p-8 shadow-[0_10px_40px_rgba(0,0,0,0.04)] mb-8 flex items-center justify-between">
+              <div className="w-full animate-fade-in flex flex-col items-center self-start">
+                <div className="w-full max-w-[480px] bg-white border border-[#EAE9E4] rounded-[40px] p-6 sm:p-8 shadow-[0_10px_40px_rgba(0,0,0,0.04)] mb-8 flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     <img src={getServiceIcon(selectedStyle!)} alt="" className="w-10 h-10 object-contain" />
                     <div className="flex flex-col">
@@ -328,7 +344,7 @@ const App: React.FC = () => {
             )}
 
             {activeField === 'payment' && (
-              <div className="w-full max-w-[480px] animate-fade-in flex flex-col items-center">
+              <div className="w-full animate-fade-in flex flex-col items-start">
                 <span className="text-[#888888] text-[10px] font-bold uppercase tracking-widest mb-4">Confirm total GH {totalAmount}</span>
                 <NavRow isNextHidden={true}>
                   <button 
@@ -346,7 +362,7 @@ const App: React.FC = () => {
                  <div className="w-16 h-16 bg-[#FEE2E2] rounded-full mb-6 flex items-center justify-center">
                     <span className="text-[#E11D48] font-bold text-lg">Momo</span>
                  </div>
-                 <h3 className="text-xl font-bold mb-2">Confirm Payment</h3>
+                 <h3 className="text-xl font-bold mb-2 text-center">Confirm Payment</h3>
                  <p className="text-[#888888] text-center mb-8 text-sm">Enter 4-digit PIN to authorize GH {totalAmount}.</p>
                  <input 
                    type="password" 
@@ -367,7 +383,7 @@ const App: React.FC = () => {
             )}
 
             {activeField === 'summary' && (
-              <div className="w-full animate-fade-in flex flex-col items-center h-full max-h-full">
+              <div className="w-full animate-fade-in flex flex-col items-start h-full max-h-full">
                 <div className="w-full max-w-[480px] flex-1 flex flex-col justify-center min-h-0">
                   <div className="bg-white border border-[#EAE9E4] rounded-[40px] p-8 shadow-[0_20px_60px_rgba(0,0,0,0.06)] flex flex-col items-center">
                     <div className="w-full mb-8">
